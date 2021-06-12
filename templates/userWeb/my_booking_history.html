@@ -1,0 +1,200 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <title>软件工程课程实训案例</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!--     Fonts and icons     -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" /> -->
+    <!-- 因为google访问不稳定，换为本地已下载好的文件-->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/material_icons.css' %}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <!-- Material Kit CSS -->
+    <link href="{% static 'assets/css/material-dashboard.css' %}" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="{% static 'assets/demo/demo.css' %}" rel="stylesheet" />
+    <style>
+        /* Make the image fully responsive */
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .card {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .tsinghua-color {
+            color: #9c27b0;
+        }
+
+        .date {
+            font-size:15px;
+            font-weight:bold;
+            margin-top: 8px;
+        }
+
+        .weekday {
+            margin-top:-16px;
+        }
+
+        .state {
+            margin-top:-16px;
+            margin-bottom:8px;
+        }
+
+        .rounded{
+            background-color: #fafafa;
+            border: 1px solid #fafafa;
+        }
+
+        .state-active{
+            background-color: #f0faf0 !important;
+        }
+
+        .state-selected{
+            background-color: #fce1b9 !important;
+        }
+
+        .fellow-travelers-number{
+            float: left;
+            width: 10%;
+            text-align: center;
+        }
+
+        .fellow-travelers-info{
+            float: left;
+            width: 90%;
+        }
+
+        .form-group{
+            margin: 0px 0 0;
+        }
+
+        .fellow-travelers-info input{
+            border: 0px solid;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="wrapper">
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <h4 class="card-title text-center" style="margin-bottom:0px; margin-top:15px;">我的预约</h4>
+        </div>
+
+    </div>
+
+
+
+    <div class="main-panel m-auto" style="float:none;">
+        <!-- End Navbar -->
+        <div class="content" style="margin-top:-30px;">
+            <div class="container-fluid">
+                <!-- your content here -->
+
+                {%  for row in booking_records %}
+                    <div class="card">
+
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="card-title"><h5>{{ row.username }}</h5></p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-title pull-right">#状态:
+                                        {% if row.status == 1 %}
+                                            <span class="badge badge-success">待入场</span>
+                                        {% elif row.status == 2%}
+                                            <span class="badge badge-info">已入场</span>
+                                        {% else %}
+                                            <span class="badge badge-secondary">已取消</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            <!--<div class="row" style='margin-top:-20px;margin-bottom:-16px;'>
+                                <div class="col-12">
+                                    <p class="card-category">居民身份证：{{ row.id_card }}</p>
+                                </div>
+                            </div>-->
+
+                            <div class="row" style='margin-top:6px;margin-bottom:6px;'>
+                                <div class="col-12">
+                                    <p class="card-category">预约时间：{{ row.datetime_start | date:"Y-m-d" }} 至 {{ row.datetime_end | date:"Y-m-d" }}</p>
+                                </div>
+                            </div>
+
+
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="card-category">同行人信息（TODO 有才显示）</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row rounded">
+                            <div class="fellow-travelers-number m-auto">
+                                <span>1</span>
+                            </div>
+                            <div class="fellow-travelers-info">
+                                <div class="form-group" style='margin: 0px 0 0; padding-bottom:0px;'>
+                                    <p class="card-category">姓名：</p>
+                                    <p class="card-category">身份证：{{ id_card }}</p>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="row rounded">
+                                <div class="fellow-travelers-number m-auto">
+                                    <span>2</span>
+                                </div>
+                                <div class="fellow-travelers-info">
+                                    <div class="form-group" style='margin: 0px 0 0; padding-bottom:0px;'>
+                                        <p class="card-category">姓名：</p>
+                                        <p class="card-category">身份证：{{ id_card }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+
+                                </div>
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-primary" style='width:100%;'>取消预约</button>
+                                </div>
+
+                            </div>
+
+
+
+                    </div>
+
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<!--   Core JS Files   -->
+<script src="{% static 'assets/js/core/jquery.min.js' %}"></script>
+
+
+</html>

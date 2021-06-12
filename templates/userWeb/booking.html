@@ -1,0 +1,333 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <title>软件工程课程实训案例</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <!--     Fonts and icons     -->
+  <!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" /> -->
+  <!-- 因为google访问不稳定，换为本地已下载好的文件-->
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/material_icons.css' %}" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  <!-- Material Kit CSS -->
+  <link href="{% static 'assets/css/material-dashboard.css' %}" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href="{% static 'assets/demo/demo.css' %}" rel="stylesheet" />
+  <style>
+  /* Make the image fully responsive */
+  .carousel-inner img {
+      width: 100%;
+      height: 100%;
+  }
+
+  .card {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .tsinghua-color {
+    color: #9c27b0;
+  }
+
+  .date {
+    font-size:15px;
+    font-weight:bold;
+    margin-top: 8px;
+  }
+
+  .weekday {
+    margin-top:-16px;
+  }
+
+  .state {
+    margin-top:-16px;
+    margin-bottom:8px;
+  }
+
+  .rounded{
+    background-color: #fafafa;
+    border: 1px solid #fafafa;
+  }
+
+  .state-active{
+    background-color: #f0faf0 !important;
+  }
+
+  .state-selected{
+    background-color: #fce1b9 !important;
+  }
+
+  .fellow-travelers-number{
+    float: left;
+    width: 10%;
+    text-align: center;
+  }
+
+  .fellow-travelers-info{
+    float: left;
+    width: 90%;
+  }
+
+  .form-group{
+    margin: 0px 0 0;
+  }
+
+  .fellow-travelers-info input{
+    border: 0px solid;
+  }
+  </style>
+
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <h4 class="card-title text-center" style="margin-bottom:0px; margin-top:15px;">预约</h4>
+      </div>
+
+    </div>
+
+    
+
+    <div class="main-panel m-auto" style="float:none;">
+      <!-- End Navbar -->
+      <div class="content" style="margin-top:-30px;">
+        <div class="container-fluid">
+          <!-- your content here -->
+
+          {% if is_login == True %}
+          <div class="card">
+
+              <div class="card-body">
+                
+                  <div class="row">
+                    <div class="col-8">
+                      <p class="card-title"><h5>{{ username }}</h5></p>
+                    </div>
+                    <div class="col-4">
+                      <a href="/userweb/sign"><p class="card-title pull-right">修改实名</p></a>
+                    </div>
+                  </div>
+                  <div class="row" style='margin-top:-20px;margin-bottom:-16px;'>
+                    <div class="col-12">
+                    <p class="card-category">居民身份证：{{ id_card }}</p>
+                    </div>
+                  </div>
+                  
+              </div>
+
+          </div>
+          {% else %}
+          <div class="card">
+
+              <div class="card-body">
+                
+                  <div class="row">
+                    <div class="col-8">
+                      <p class="card-title"><h5>您尚未登录</h5></p>
+                    </div>
+                    <div class="col-4">
+                      <a href="/userweb/sign"><p class="card-title pull-right">请实名登录</p></a>
+                    </div>
+                  </div>
+                  
+              </div>
+
+          </div>
+          {% endif %}
+
+          <div class="card">
+
+            <div class="card-body"  style="margin-top:-10px;">
+              
+                <div class="row">
+                  <div class="col-12">
+                    <p class="card-category">选择日期（北京时间 UTC+8）</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="container text-center">
+                    <!-- 边框圆角 -->
+                      
+                      <div class="row justify-content-around" id = 'dates'>
+                          {%  for row in dates %}
+                        <span class="rounded col-3 {% if row.remain_number > 0 %}state-active{% endif %}" id="{{ row.id }}">
+
+                            <p class = 'date'>{{ row.datetime_start | date:"m/d" }}</p>
+                            <p class = 'weekday'>{{ row.datetime_start | date:"l" }}</p>
+                            <p class = 'state'>
+                                {% if row.remain_number > 0 %}
+                                   余{{ row.remain_number }}
+                                {% else %}
+                                    已约满
+                                {% endif %}
+                            </p>
+                          
+                        </span>
+                          {% endfor %}
+
+                        <!-- 4个一行，不足4个则补足-->
+                            {% for i in blank_range %}
+                        <span class="rounded col-3">
+
+                            <p class = 'date'></p>
+                            <p class = 'weekday'></p>
+                            <p class = 'state'></p>
+
+                        </span>
+                            {% endfor %}
+
+                      </div>
+                    
+                  </div>
+                  
+                </div>
+              
+            </div>
+            
+          </div>
+
+          <div class="card">
+
+            <div class="card-body"  style="margin-top:-10px;">
+              
+                <div class="row">
+                    <div class="col-9">
+                       <p class="card-category">同行人信息(无同行人时不填写)</p>
+                    </div>
+                    <div class="col-3">
+                      <a href="#"><p class="card-category pull-right">清空</p></a>
+                    </div>
+                </div>
+                
+                  
+                <div class="row rounded">
+                  <div class="fellow-travelers-number m-auto">
+                    <span>1</span>
+                  </div>
+                  <div class="fellow-travelers-info">
+                    <div class="form-group" style='margin: 0px 0 0; padding-bottom:0px;'>
+                      <input type="text" class="form-control" placeholder="输入姓名">
+                      <input type="text" class="form-control" placeholder="输入身份证号">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row rounded" style='margin-top:10px;'>
+                  <div class="fellow-travelers-number m-auto">
+                    <span>2</span>
+                  </div>
+                  <div class="fellow-travelers-info">
+                    <div class="form-group" style='margin: 0px 0 0; padding-bottom:0px;'>
+                      <input type="text" class="form-control" placeholder="输入姓名">
+                      <input type="text" class="form-control" placeholder="输入身份证号">
+                    </div>
+                  </div>
+                </div>
+          
+            </div>
+            
+          </div>
+          <button type="submit" class="btn btn-primary" style='width:100%;height: 45px;' id = 'save_booking'>确认预约</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!--   Core JS Files   -->
+<script src="{% static 'assets/js/core/jquery.min.js' %}"></script>
+<script>
+    $(document).ready(function() {
+      $().ready(function() {
+
+          // 选中的日期
+          var selected_date_id = null;
+
+        $('#dates .state-active').click(function(event) {
+
+          console.log(this);
+          
+          // 如果当前日期的状态是可预约，则选中
+          if ($(this).hasClass('state-active')) {
+            // 将其他已选中的变成可预约，因为只能选一个时间段
+            $('.state-selected').removeClass('state-selected').addClass('state-active');
+            $(this).removeClass('state-active');
+            $(this).addClass('state-selected');
+              selected_date_id = $(this).attr('id');
+          }
+          // 如果当前日期的状态是已选中，则取消
+          else if ($(this).hasClass('state-selected')) {
+            $(this).removeClass('state-selected');
+            $(this).addClass('state-active');
+            selected_date_id = null
+          }
+
+          console.log(selected_date_id)
+
+
+        });
+
+        $("#save_booking").click(function(){
+
+              if(selected_date_id == null){
+                  alert("请选择一个时间段");
+                  return;
+              }
+
+              var data = {}
+              data['selected_date_id'] = selected_date_id;
+              // TODO 此处省略了同行人的代码
+              // 同学们自己补充同行人信息
+
+              console.log(data)
+
+              $.ajax({
+                  type:"POST",
+                  url:"/userweb/save_booking",
+                  data: data,
+                  datatype:"json",
+                  success: function(ret){
+                      console.log(ret)
+                      if(ret.code == 0){
+                          var r=confirm("预约成功");
+
+                          window.location.href='/userweb/my_booking_history';
+
+                      }
+                      else if(ret.code == 1){
+                          var r=alert("参数不足，请重试");
+                      }
+                      else if(ret.code == 2){
+                          var r=alert("请先实名验证登陆");
+                      }
+                      else{
+                          var r=alert("没有名额了，请选择其他时间段");
+                          location.reload();
+                      }
+                  },
+                  //调用出错执行的函数
+                  error: function(){
+                      //请求出错处理
+                  }
+              })
+          });
+
+      
+      });
+    });
+</script>
+
+</html>

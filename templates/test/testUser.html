@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p>请输入用户信息</p>
+<form action="/testadduser" method="post">
+    {%csrf_token%}
+    姓名: <input type="text" name="name"> <br>
+    用户等级: <input type="number" name="level"> <br>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>
