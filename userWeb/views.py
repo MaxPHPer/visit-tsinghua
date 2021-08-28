@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django.core import serializers
+from django.db import transaction
 from django.forms import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -168,15 +169,6 @@ def save_booking(request):
     date = EveryDayBookingInfo.objects.filter(id=selected_date_id).first()
     selected_date = model_to_dict(date)
     print(selected_date)
-
-    # 如果可预约人数小于等于0，则表示已经被预约完了
-    if selected_date['remain_number'] <= 0:
-        return_json = {}
-        return_json['code'] = 3
-        return_json['msg'] = '该时间段已经被预约完了'
-        return_json['data'] = {}
-
-        return HttpResponse(json.dumps(return_json), content_type='application/json')
 
     # TODO
     # 此处省略了校验该用户是否重复预约，同学们可以自己补充
